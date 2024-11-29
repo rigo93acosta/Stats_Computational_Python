@@ -3,7 +3,10 @@
     - [Optimzación Fibonnaci](#optimización-de-fibonacci)
         - [Optimización Especial](#optimización-especial)
         - [Código](#código)
-    
+    - [Caminos Aleatorios](#caminos-aleatorios)
+        - [Resultados](#resultado-de-la-simulacion)
+        - [Código](#códigos-del-borracho)
+- [Procesos Estocásticos](#procesos-estocásticos)
 
 # Programación dinámica
 
@@ -92,3 +95,199 @@ if __name__ == '__main__':
     print(resultado)
 ```
 
+## Caminos Aleatorios
+
+> Caminos Aleatorios:
+> - Es un tipo de simulación que elige aleatoriamente una decisión dentro de un conjunto de decisiones válidas.
+> - Se utiliza en muchos campos del conocimiento cuando los sistemas no son deterministas e incluyen elementos de aleatoriedad.
+
+La idea viene dado por el movimiento browniano, este es el movimiento aleatorio de partículas suspendidas en un fluido (líquido o gas) debido a colisiones con moléculas del medio. Este fenómeno fue observado por Robert Brown en 1827 y es un ejemplo de un proceso estocástico
+
+### Entendiendo la aleatoriedad con Python
+
+Se dividio en 3 clases:
+- ¿Qué es un borracho? *Borracho*
+- ¿Dónde se mueve este borracho? *Campo*
+- Concepto abstracto a tráves de un objeto: *Coordenada*.
+
+**Borracho**, toma cambios en alguna de las coordenadas de forma aleatoria. Cada posible paso tiene igual probabilidad de ocurrencia.
+```python
+import random
+
+class Borracho:
+
+    def __init__(self, nombre):
+        self.nombre = nombre
+
+
+class BorrachoTradicional(Borracho):
+
+    def __init__(self, nombre):
+        super().__init__(nombre)
+
+    def camina(self):
+        # Igual probabilidad seleccionar cualquier paso
+        return random.choice([(0, 1), (0, -1), (1, 0), (-1, 0)])
+
+```
+
+
+**Campo**, muestra (gráfica) los pasos del borracho y limita el área donde se mueve.
+```python
+class Campo:
+
+    def __init__(self):
+        self.coordenadas_de_borrachos = {}
+
+    def anadir_borracho(self, borracho, coordenada):
+        """
+        Add Borracho al campo
+        """
+        self.coordenadas_de_borrachos[borracho] = coordenada
+
+    def mover_borracho(self, borracho):
+        """
+        Mueve el borracho modificando sus coordenadas
+        """
+        # Genera un paso
+        delta_x, delta_y = borracho.camina()
+        # Obtiene las coordenadas del borracho
+        coordenada_actual = self.coordenadas_de_borrachos[borracho]
+        # Crea una nueva coordena
+        nueva_coordenada = coordenada_actual.mover(delta_x, delta_y)
+        # Modifica la coordena
+        self.coordenadas_de_borrachos[borracho] = nueva_coordenada
+
+    def obtener_coordenada(self, borracho):
+        """
+        Get Coordenada
+        """
+        return self.coordenadas_de_borrachos[borracho]
+    
+```
+
+**Coordenada**, crea el marco de referencia para el *Borracho* y el *Campo*. Nos permite también calcular la distancia entre una coordena y otra.
+```python
+
+class Coordenada:
+
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+
+    def mover(self, delta_x, delta_y):
+        """
+        Retorna una nueva Coordenada
+        """
+        return Coordenada(self.x + delta_x, self.y + delta_y)
+
+    def distancia(self, otra_coordenada):
+        """
+        Calcula la distancia Euclidiana
+        """
+        delta_x = self.x - otra_coordenada.x 
+        delta_y = self.y - otra_coordenada.y 
+
+        return (delta_x**2 + delta_y**2)**0.5
+```
+
+> La simulación genera $n$ cantidad de pasos del borracho. Siempre que hacemos aleatoriedad ejecutamos $m$ simulaciones para $n$ pasos. Para luego obtener las estadísticas necesarias para proponer los resultados de esas observaciones.
+
+```python
+# Librerias a emplear
+from borracho import BorrachoTradicional
+from campo import Campo 
+from coordenada import Coordenada 
+
+# Para graficar
+from bokeh.plotting import figure, show
+
+def caminata(campo, borracho, pasos):
+    # Coordinate init
+    inicio = campo.obtener_coordenada(borracho)
+
+    for _ in range(pasos):
+        # Move borracho
+        campo.mover_borracho(borracho)
+
+    # Return distance between origin and end
+    return inicio.distancia(campo.obtener_coordenada(borracho))
+
+
+def simular_caminata(pasos, numero_de_intentos, tipo_de_borracho):
+    
+    # Add Borracho
+    borracho = tipo_de_borracho(nombre='Rigo')
+    # Crear origen
+    origen = Coordenada(0, 0)
+    # Save distance
+    distancias = []
+
+    for _ in range(numero_de_intentos):
+        # Creo el campo
+        campo = Campo()
+        # Ubico el borracho
+        campo.anadir_borracho(borracho, origen)
+        # Caminar y devuelve la distancia caminda desde el origen
+        simulacion_caminata = caminata(campo, borracho, pasos)
+        # Save
+        distancias.append(round(simulacion_caminata, 1))
+
+    return distancias
+
+def graficar(x, y):
+    """
+    Plot n vs Distancia media
+    """
+    grafica = figure(title='Camino aleatorio', x_axis_label='pasos', y_axis_label='distancia')
+    grafica.line(x, y, legend_label='distancia media')
+
+    show(grafica)
+
+def main(distancias_de_caminata, numero_de_intentos, tipo_de_borracho):
+
+    # Save mean distance
+    distancias_media_por_caminata = []
+
+    for pasos in distancias_de_caminata:
+        distancias = simular_caminata(pasos, numero_de_intentos, tipo_de_borracho)
+        # Media
+        distancia_media = round(sum(distancias) / len(distancias), 4)
+        # Maxima
+        distancia_maxima = max(distancias)
+        # Minima
+        distancia_minima = min(distancias)
+        # Save
+        distancias_media_por_caminata.append(distancia_media)
+        print(f'{tipo_de_borracho.__name__} caminata aleatoria de {pasos} pasos')
+        print(f'Media = {distancia_media}')
+        print(f'Max = {distancia_maxima}')
+        print(f'Min = {distancia_minima}')
+
+    graficar(distancias_de_caminata, distancias_media_por_caminata)
+
+if __name__ == '__main__':
+
+    # Number of steps -> n
+    distancias_de_caminata = [10, 100, 1000, 10000]
+    # Number of Simulations -> m
+    numero_de_intentos = 100
+
+    main(distancias_de_caminata, numero_de_intentos, BorrachoTradicional)
+```
+### Resultado de la Simulacion
+
+![Distancias Medias](images/camino_aleatorio.png)
+
+### Códigos del Borracho
+
+|Name File | Link |
+|-|-|
+|Borracho| [Borracho](src/borracho.py) |
+|Campo| [Campo](src/campo.py) |
+|Coordenadas | [Coordenadas](src/coordenada.py)|
+|Simulación | [Simulation](src/camino_aleatorio.py)|
+
+
+
+# Procesos Estocásticos
