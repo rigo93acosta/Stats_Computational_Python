@@ -14,6 +14,7 @@ def fibonacci_dinamico(n, memo = {}):
     try:
         return memo[n]
     except KeyError:
+        # Si no esta en el diccionario, lo calculamos y lo guardamos
         resultado = fibonacci_dinamico(n - 1, memo) + fibonacci_dinamico(n - 2, memo)
         memo[n] = resultado
 
@@ -22,5 +23,6 @@ def fibonacci_dinamico(n, memo = {}):
 if __name__ == '__main__':
     sys.setrecursionlimit(10002)
     n = int(input('Escoge un numero: '))
-    resultado = fibonacci_dinamico(n)
+    resultado = fibonacci_recursivo(n)
+    # resultado = fibonacci_dinamico(n)
     print(resultado)
