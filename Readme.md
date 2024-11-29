@@ -1,3 +1,10 @@
+# Tabla de Contenido
+- [Programación dinámica](#programación-dinámica)
+    - [Optimzación Fibonnaci](#optimización-de-fibonacci)
+        - [Optimización Especial](#optimización-especial)
+        - [Código](#código)
+    
+
 # Programación dinámica
 
 **Programación dinámica:** Se escogió para esconder a patrocinadores gubernamentales el hecho que en realidad estaba haciendo Matemáticas. La frase Programación Dinámica es algo que ningún congresista puede oponerse. **Richard Bellman**
