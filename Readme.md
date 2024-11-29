@@ -1,4 +1,4 @@
-# Tabla de COntenido
+# Tabla de Contenido
 - [Programación dinámica](#programación-dinámica)
     - [Optimzación Fibonnaci](#optimización-de-fibonacci)
         - [Optimización Especial](#optimización-especial)
