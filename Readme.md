@@ -288,6 +288,45 @@ if __name__ == '__main__':
 |Coordenadas | [Coordenadas](src/coordenada.py)|
 |Simulación | [Simulation](src/camino_aleatorio.py)|
 
+### Código para solo observar los pasos del borracho
 
+> Nota: Aportado por un estudiante de la comunidad de Platzi. (Angel Armando Martínez Blanco)
+
+```python
+from borracho import BorrachoTradicional
+from coordenada import Coordenada
+from campo import Campo
+
+from bokeh.plotting import figure, show
+
+def main(distancia, inicio, borracho):
+    campo = Campo()
+    campo.anadir_borracho(borracho, inicio) #poner un borracho en origen
+    ejecutar_caminata(campo, borracho, distancia)
+
+def ejecutar_caminata(campo, borracho, distancia):
+    x_arreglo = []
+    y_arreglo = []
+    x_arreglo.append(campo.obtener_coordenada(borracho).x)
+    y_arreglo.append(campo.obtener_coordenada(borracho).y)
+    for _ in range(distancia):
+        campo.mover_borracho(borracho) #se actualiza las coordenadas del borracho
+        x_arreglo.append(campo.obtener_coordenada(borracho).x)
+        y_arreglo.append(campo.obtener_coordenada(borracho).y)
+
+    graficar(x_arreglo, y_arreglo)
+
+def graficar(x, y):
+    figura = figure()
+    figura.line(x, y)
+    show(figura)
+
+if __name__ == '__main__':
+    distancia = 1000000
+    inicio = Coordenada(0,0)
+    borracho = BorrachoTradicional('Rigo')
+    main(distancia, inicio, borracho)
+```
+![Resultado Caminta Borracho](images/borracho_caminata.png)
 
 # Procesos Estocásticos
