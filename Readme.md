@@ -19,9 +19,33 @@ $$F_n = F_{n-1} + F_{n-2} \quad \forall~n > 2$$
 
 ![Fibonacci](images/Fibonnaci.png)
 
-Pero el algoritmo recursivo es ineficiente, 
+Pero el algoritmo recursivo es ineficiente, debido a que crece de manera exponencial el tiempo de cómputo.
 
-[**File**: Fibonnaci: programacion_dinamica-1.py](src/programacion_dinamica-1.py)
+> **Hint:** Para medir tiempo de ejecución desde consola (Mi sistema operativo es Pop!_OS):
+>```shell
+>time python src/programacion_dinamica-1.py
+>```
+Aprovechando el tiempo de consulta de los diccionarios optimizamos el tiempo de ejecución para calcular un número $n$ de Fibonacci.
+
+>**Hint:** Para aumentar el tamaño de recursión y no sea un límite, añadimos la siguiente línea de código:
+>```python
+>sys.setrecursionlimit(10002)
+>```
+
+> Sitio Web para observar como funciona ambos algoritmos: [Dynamic Programming (Fibonacci)](https://www.cs.usfca.edu/~galles/visualization/DPFib.html)
+
+### Optimización Especial
+```python
+from functools import lru_cache
+
+@lru_cache(maxsize=None)
+def fib(n):
+    if n < 2:
+        return n
+    return fib(n-1) + fib(n-2)
+```
+### Código 
+[**File**: programacion_dinamica-1.py](src/programacion_dinamica-1.py)
 ```python
 import sys
 
