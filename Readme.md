@@ -1,3 +1,7 @@
+# Curso de Estadística Computacional con Python
+
+![Portada](images/Portada.jpeg)
+
 # Tabla de Contenido
 - [Programación dinámica](#programación-dinámica)
     - [Optimzación Fibonnaci](#optimización-de-fibonacci)
@@ -6,7 +10,13 @@
     - [Caminos Aleatorios](#caminos-aleatorios)
         - [Resultados](#resultado-de-la-simulacion)
         - [Código](#códigos-del-borracho)
+        - [Aporte solo pasos del borracho](#código-para-solo-observar-los-pasos-del-borracho)
 - [Procesos Estocásticos](#procesos-estocásticos)
+- [Monte Carlos](#monte-carlos)
+- [Muestreo e Intervalos de Confianza](#muestro-e-intervalos-de-confianza)
+- [Datos experimentales](#datos-experimentales)
+- [Conclusiones](#conclusiones)
+
 
 # Programación dinámica
 
@@ -330,3 +340,11 @@ if __name__ == '__main__':
 ![Resultado Caminta Borracho](images/borracho_caminata.png)
 
 # Procesos Estocásticos
+
+# Monte Carlos
+
+# Muestro e Intervalos de Confianza
+
+# Datos Experimentales
+
+# Conclusiones
